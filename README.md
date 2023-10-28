@@ -75,9 +75,9 @@ You can verify that the Docker daemon is running by executing the following comm
 ## Installation
 ### Download pre-built binaries
 
-- [Mac .tar.gz](https://github.com/adrianbrad/privatebtc/releases/download/v0.0.5/ChatGPT-0.0.5-arm64.dmg)
-- [Linux Arm64 .tar.gz](https://github.com/adrianbrad/privatebtc/releases/download/v0.0.5/ChatGPT-0.0.5-arm64.dmg)
-- [Linux Intel .tar.gz](https://github.com/vincelwt/privatebtc/releases/download/v0.0.5/ChatGPT-0.0.5-x64.dmg)
+- [Mac .tar.gz](https://github.com/adrianbrad/privatebtc/releases/download/v0.1.1/privatebtc-v0.1.1-darwin-all.tar.gz)
+- [Linux Arm64 .tar.gz](https://github.com/adrianbrad/privatebtc/releases/download/v0.1.1/privatebtc-v0.1.1-linux-arm64.tar.gz)
+- [Linux Intel .tar.gz](https://github.com/adrianbrad/privatebtc/releases/download/v0.1.1/privatebtc-v0.1.1-linux-x86_64.tar.gz)
 
 ---
 
