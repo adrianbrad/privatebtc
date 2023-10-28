@@ -1,0 +1,65 @@
+name: lint-test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  schedule:
+    - cron: '0 0 1 * *' # once a month
+
+concurrency:
+  group: "lint-test"
+
+permissions:
+  contents: read # for actions/checkout to fetch code
+  pull-requests: read  # for to fetching pull requests
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --timeout 5m
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+#          - macos-latest-xlarge
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+
+      - name: Install Docker (mac)
+        if: runner.os == 'macos'
+        run: |
+          brew install docker
+          colima start
+          
+          # For testcontainers to find the Colima socket
+          # https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#cannot-connect-to-the-docker-daemon-at-unixvarrundockersock-is-the-docker-daemon-running
+          sudo ln -sf $HOME/.colima/default/docker.sock /var/run/docker.sock
+
+      - name: Run Tests
+        run: |
+          go test -mod=mod -shuffle=on -race -timeout 300s ./...

@@ -1,0 +1,70 @@
+project_name: privatebtc
+env:
+  - GO11MODULE=on
+  - GO111MODULE=on
+  - GOPROXY=https://goproxy.io,direct
+  - CGO_ENABLED=0
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - id: darwin-amd64
+    goos:
+      - darwin
+    goarch:
+      - amd64
+    main: ./cmd/privatebtc
+    binary: privatebtc
+    ldflags: -s -w 
+      -X main.version={{.Version}} 
+      -X main.revision={{.ShortCommit}} 
+      -X main.time={{.Date}}
+    flags: -v
+  - id: darwin-arm64
+    goos:
+      - darwin
+    goarch:
+      - arm64
+    main: ./cmd/privatebtc
+    binary: privatebtc
+    ldflags: -s -w
+      -X main.version={{.Version}}
+      -X main.revision={{.ShortCommit}}
+      -X main.time={{.Date}}
+    flags: -v
+  - id: linux
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    main: ./cmd/privatebtc
+    binary: privatebtc
+    ldflags: -s -w
+      -X main.version={{.Version}}
+      -X main.revision={{.ShortCommit}}
+      -X main.time={{.Date}}
+    flags: -v
+universal_binaries:
+  - id: privatebtc-universal
+    ids:
+      - darwin-amd64
+      - darwin-arm64
+    replace: true
+archives:
+  - format: tar.gz
+    name_template: '{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ if eq .Arch "amd64" }}x86_64{{ else }}{{ .Arch }}{{ end }}'
+checksum:
+  name_template: checksums.txt
+snapshot:
+  name_template: "{{ incpatch .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+release:
+  github:
+    owner: adrianbrad
+    name: privatebtcdocker

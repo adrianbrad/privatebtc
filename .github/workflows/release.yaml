@@ -1,0 +1,91 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-rc[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-beta[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-alpha[0-9]+"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "lint-test"
+  cancel-in-progress: true
+
+jobs:
+  # Lint go source code.
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+
+      - name: Run Go linters
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: --timeout 5m
+
+  # Run unit tests.
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+
+      - name: Install Docker (mac)
+        if: runner.os == 'macos'
+        run: |
+          brew install docker
+          colima start
+          
+          # For testcontainers to find the Colima socket
+          # https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#cannot-connect-to-the-docker-daemon-at-unixvarrundockersock-is-the-docker-daemon-running
+          sudo ln -sf $HOME/.colima/default/docker.sock /var/run/docker.sock
+
+      - name: Run Tests
+        run: |
+          go test -mod=mod -shuffle=on -race -timeout 300s ./...
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all tags
+        run: git fetch --force --tags
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+
+      - name: Run GoReleaser for release
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --debug --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
