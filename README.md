@@ -7,6 +7,8 @@
 [![GoDoc reference](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/adrianbrad/privatebtc)
 
 [![CodeFactor](https://www.codefactor.io/repository/github/adrianbrad/privatebtc/badge)](https://www.codefactor.io/repository/github/adrianbrad/privatebtc)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/adrianbrad/privatebtc/badge)](https://api.securityscorecards.dev/projects/github.com/adrianbrad/privatebtc)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/8016/badge)](https://bestpractices.coreinfrastructure.org/projects/8016)
 [![Go Report Card](https://goreportcard.com/badge/github.com/adrianbrad/privatebtc)](https://goreportcard.com/report/github.com/adrianbrad/privatebtc)
 [![codecov](https://codecov.io/gh/adrianbrad/privatebtc/branch/main/graph/badge.svg)](https://codecov.io/gh/adrianbrad/privatebtc)
 

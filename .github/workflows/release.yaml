@@ -62,7 +62,15 @@ jobs:
 
       - name: Run Tests
         run: |
-          go test -mod=mod -shuffle=on -race -timeout 300s ./...
+          go test -mod=mod -shuffle=on -race -timeout 300s -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: Upload coverage report
+        if: runner.os == 'Linux'
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.txt
+          flags: unittests
 
   release:
     runs-on: ubuntu-latest
