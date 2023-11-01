@@ -2,6 +2,7 @@ package privatebtc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -211,9 +212,33 @@ func (nodes Nodes) EnsureTransactionInEveryMempool(
 				}
 
 				if !ok {
+					var errs error
+
+					rawMempool, err := node.RPCClient().GetRawMempool(ctx)
+					if err != nil {
+						errs = errors.Join(errs, fmt.Errorf("get raw mempool: %w", err))
+					}
+
+					connCount, err := node.RPCClient().GetConnectionCount(ctx)
+					if err != nil {
+						errs = errors.Join(errs, fmt.Errorf("get connection count: %w", err))
+					}
+
+					tx, err := node.RPCClient().GetTransaction(ctx, txHash)
+					if err != nil {
+						errs = errors.Join(errs, fmt.Errorf("get raw transaction: %w", err))
+					}
+
 					return fmt.Errorf(
-						"get tx for node %d: %w",
+						"get tx %q for node %d, "+
+							"raw mempool: %q, "+
+							"connection count: %d, "+
+							"raw tx %+v: %w",
+						txHash,
 						i,
+						rawMempool,
+						connCount,
+						tx,
 						ErrTxNotFoundInMempool,
 					)
 				}
