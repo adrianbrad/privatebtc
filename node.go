@@ -229,7 +229,7 @@ func (nodes Nodes) EnsureTransactionInEveryMempool(
 						errs = errors.Join(errs, fmt.Errorf("get raw transaction: %w", err))
 					}
 
-					return fmt.Errorf(
+					return errors.Join(errs, fmt.Errorf(
 						"get tx %q for node %d, "+
 							"raw mempool: %q, "+
 							"connection count: %d, "+
@@ -240,7 +240,7 @@ func (nodes Nodes) EnsureTransactionInEveryMempool(
 						connCount,
 						tx,
 						ErrTxNotFoundInMempool,
-					)
+					))
 				}
 
 				return nil

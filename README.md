@@ -158,14 +158,14 @@ This will add the `privatebtc` command to your `$GOPATH/bin` directory.
 ---
 
 ##### Create Address
-![Ceate Address](docs/create_address.gif)
+![Ceate Address](https://github.com/adrianbrad/privatebtc/blob/assets/gifs/create_address.gif?raw=true)
 
 In order to create a new Address, select the node you want to create the address on, 
 by focusing on the **Nodes** panel and using the **Up and Down Arrow Keys** to navigate through the available items.
 After you have selected the node, move the focus on the **Actions** panel and select the **Create Address** action.
 
 ##### Funding and Mining
-![Funding and Mining](docs/fund_mining.gif)
+![Funding and Mining](https://github.com/adrianbrad/privatebtc/blob/assets/gifs/fund_mining.gif?raw=true)
 
 In order to fund a node, select the node you want to fund, 
 by focusing on the **Nodes** panel and using the **Up and Down Arrow Keys** to navigate through the available items.
@@ -173,7 +173,7 @@ After you have selected the node, move the focus to the **Actions** panel and se
 A modal will appear, asking you to input the number of blocks you want to mine and the address to where to send the coinbase reward.
 
 ##### Send BTC
-![Send BTC](docs/send_btc.gif)
+![Send BTC](https://github.com/adrianbrad/privatebtc/blob/assets/gifs/send_btc.gif?raw=true)
 In order to send BTC from one node to another, select the node you want to send BTC from, 
 by focusing on the **Nodes** panel and using the **Up and Down Arrow Keys** to navigate through the available items.
 After you have selected the node, move the focus to the **Actions** panel and select the **Send to address** action.
@@ -182,7 +182,7 @@ In order to confirm the transaction, a new block has to be mined on the network,
 you can find more details about this in the [Funding and Mining](#funding-and-mining) section.
 
 ##### Chain Reorg Involving Double Spend
-![Double Spend](docs/double_spend.gif)
+![Double Spend](https://github.com/adrianbrad/privatebtc/blob/assets/gifs/double_spend.gif?raw=true)
 
 To successfully execute a double spend, wherein both transactions are valid and initially mined in separate blocks before a chain reorganization resolves the conflict, follow these steps:
 
