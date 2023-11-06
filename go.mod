@@ -12,7 +12,7 @@ require (
 	github.com/matryer/is v1.4.1
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/rivo/tview v0.0.0-20231031172508-2dfe06011790
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.26.0
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
