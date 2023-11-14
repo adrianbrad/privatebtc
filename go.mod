@@ -11,19 +11,19 @@ require (
 	github.com/gdamore/tcell/v2 v2.6.0
 	github.com/matryer/is v1.4.1
 	github.com/ory/dockertest/v3 v3.10.0
-	github.com/rivo/tview v0.0.0-20231031172508-2dfe06011790
-	github.com/spf13/cobra v1.7.0
+	github.com/rivo/tview v0.0.0-20231113063814-05d01944a18b
+	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.26.0
-	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
-	golang.org/x/sync v0.4.0
+	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa
+	golang.org/x/sync v0.5.0
 )
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
-	github.com/Microsoft/hcsshim v0.11.2 // indirect
+	github.com/Microsoft/hcsshim v0.11.4 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.0.2 // indirect
@@ -78,14 +78,14 @@ require (
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
-	golang.org/x/crypto v0.14.0 // indirect
-	golang.org/x/mod v0.13.0 // indirect
-	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/term v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
-	golang.org/x/tools v0.14.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231030173426-d783a09b4405 // indirect
+	golang.org/x/crypto v0.15.0 // indirect
+	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/net v0.18.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/term v0.14.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/tools v0.15.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
 	google.golang.org/grpc v1.59.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

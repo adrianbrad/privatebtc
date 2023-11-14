@@ -140,7 +140,7 @@ func (s *NodeService) CreateNodes(
 func (s *NodeService) init() {
 	s.logger = slog.New(slog.NewTextHandler(io.Discard, nil))
 
-	if s.SlogHandler == nil {
+	if s.SlogHandler != nil {
 		s.logger = slog.New(s.SlogHandler)
 	}
 }

@@ -19,9 +19,9 @@ type NodeHandler struct {
 }
 
 func newNodeHandler(res *dockertest.Resource) (*NodeHandler, error) {
-	_, hostRPCPort, err := net.SplitHostPort(
-		res.GetHostPort(privatebtc.RPCRegtestDefaultPort),
-	)
+	host := res.GetHostPort(privatebtc.RPCRegtestDefaultPort + "/tcp")
+
+	_, hostRPCPort, err := net.SplitHostPort(host)
 	if err != nil {
 		return nil, fmt.Errorf("split host port: %w", err)
 	}
