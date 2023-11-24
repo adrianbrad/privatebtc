@@ -1,6 +1,8 @@
 # PrivateBTC - Bitcoin Private Network Management and Testing Tool
 
 [![GitHub license](https://img.shields.io/github/license/adrianbrad/privatebtc)](https://github.com/adrianbrad/privatebtc/blob/main/LICENSE)
+[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
+
 
 ![GitHub release](https://img.shields.io/github/v/tag/adrianbrad/privatebtc)
 [![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/adrianbrad/privatebtc)](https://github.com/adrianbrad/privatebtc)
