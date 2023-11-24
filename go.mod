@@ -11,7 +11,7 @@ require (
 	github.com/gdamore/tcell/v2 v2.6.0
 	github.com/matryer/is v1.4.1
 	github.com/ory/dockertest/v3 v3.10.0
-	github.com/rivo/tview v0.0.0-20231113063814-05d01944a18b
+	github.com/rivo/tview v0.0.0-20231115183240-7c9e464bac02
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.26.0
@@ -31,7 +31,7 @@ require (
 	github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd // indirect
 	github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
-	github.com/containerd/containerd v1.7.8 // indirect
+	github.com/containerd/containerd v1.7.9 // indirect
 	github.com/containerd/continuity v0.4.3 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/cpuguy83/dockercfg v0.3.1 // indirect
@@ -50,7 +50,7 @@ require (
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/klauspost/compress v1.17.2 // indirect
+	github.com/klauspost/compress v1.17.3 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20231016141302-07b5767bb0ed // indirect
@@ -85,7 +85,7 @@ require (
 	golang.org/x/term v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.15.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231120223509-83a465c0220f // indirect
 	google.golang.org/grpc v1.59.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
