@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/btcsuite/btcd v0.23.5-0.20231215221805-96c9fd8078fd
-	github.com/btcsuite/btcd/btcutil v1.1.4
+	github.com/btcsuite/btcd/btcutil v1.1.5
 	github.com/docker/docker v24.0.7+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/gdamore/tcell/v2 v2.7.0
