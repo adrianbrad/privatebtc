@@ -4,19 +4,19 @@ go 1.21
 
 require (
 	github.com/avast/retry-go v3.0.0+incompatible
-	github.com/btcsuite/btcd v0.23.5-0.20231215221805-96c9fd8078fd
-	github.com/btcsuite/btcd/btcutil v1.1.4
+	github.com/btcsuite/btcd v0.24.0
+	github.com/btcsuite/btcd/btcutil v1.1.5
 	github.com/docker/docker v24.0.7+incompatible
-	github.com/docker/go-connections v0.4.0
+	github.com/docker/go-connections v0.5.0
 	github.com/gdamore/tcell/v2 v2.7.0
 	github.com/matryer/is v1.4.1
 	github.com/ory/dockertest/v3 v3.10.0
-	github.com/rivo/tview v0.0.0-20231206124440-5f078138442e
+	github.com/rivo/tview v0.0.0-20240101144852-b3bd1aa5e9f2
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.27.0
-	golang.org/x/exp v0.0.0-20231219180239-dc181d75b848
-	golang.org/x/sync v0.5.0
+	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc
+	golang.org/x/sync v0.6.0
 )
 
 require (
@@ -63,12 +63,12 @@ require (
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0-rc5 // indirect
-	github.com/opencontainers/runc v1.1.10 // indirect
+	github.com/opencontainers/runc v1.1.11 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
-	github.com/shirou/gopsutil/v3 v3.23.11 // indirect
+	github.com/shirou/gopsutil/v3 v3.23.12 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
@@ -81,11 +81,11 @@ require (
 	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
-	golang.org/x/term v0.15.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/term v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.16.1 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231212172506-995d672761c0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240102182953-50ed04b92917 // indirect
 	google.golang.org/grpc v1.60.1 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

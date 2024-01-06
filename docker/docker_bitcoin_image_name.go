@@ -1,4 +1,4 @@
 package docker
 
 // BitcoinImage is the name of the docker Image used for the bitcoin node.
-const BitcoinImage = "ruimarinho/bitcoin-core:latest"
+const BitcoinImage = "dobtc/bitcoin:latest"

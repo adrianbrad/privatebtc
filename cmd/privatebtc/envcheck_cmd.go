@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"os"
 	"runtime"
@@ -48,9 +49,9 @@ func envCheck(loggerHandler slog.Handler) bool {
 	if runtime.GOOS == "windows" {
 		logger.Error("❌ windows system detected", slog.String(
 			"details",
-			"due to the fact that windows is not supported by the "+
-				"ruimarinho/bitcoin-core docker image, "+
-				"this program is not able to run on windows",
+			fmt.Sprintf("due to the fact that windows is not supported by the "+
+				"%s docker image, "+
+				"this program is not able to run on windows", docker.BitcoinImage),
 		))
 
 		return false
