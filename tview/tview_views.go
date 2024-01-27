@@ -105,13 +105,15 @@ func newMempoolTransactionsList(
 func (l *mempoolTransactionsList) refresh() {
 	l.Clear()
 
-	if len(l.data.mempool) == 0 {
+	if len(l.data.networkMempool) == 0 {
 		l.mempoolTransactionDetails.Clear()
 		return
 	}
 
-	for k := range l.data.mempool {
-		l.AddItem(k, "", 0, nil)
+	hashes := l.data.networkMempool.Hashes()
+
+	for i := range hashes {
+		l.AddItem(hashes[i], "", 0, nil)
 	}
 }
 
@@ -123,7 +125,7 @@ type mempoolTransactionDetails struct {
 
 func (d *mempoolTransactionDetails) updateDisplayedTx(txHash string) {
 	d.currentTxHash = txHash
-	d.SetText(d.data.mempool[d.currentTxHash].String())
+	d.SetText(mempoolTxDetails(*d.data.networkMempool[d.currentTxHash]).String())
 }
 
 func newMempoolTransactionDetails(data *data) *mempoolTransactionDetails {
@@ -171,7 +173,7 @@ func newNodeActionsList(
 		nodesList,
 	)
 
-	rbfDrainToAdress := newReplaceByFeeDrainToAddressForm(
+	rbfDrainToAddress := newReplaceByFeeDrainToAddressForm(
 		appPages,
 		actionsHandler,
 		outputView,
@@ -219,6 +221,8 @@ func newNodeActionsList(
 			case 1: // Send to address
 				appPages.ShowPage("sendBitcoinForm")
 
+				sendBitcoinForm.SetFocus(1)
+
 				sendBitcoinForm.GetFormItem(0).(*tview.TextView).SetText(
 					fmt.Sprintf(
 						"Node %d Balance: %.2f",
@@ -248,6 +252,8 @@ func newNodeActionsList(
 
 			case 2: // Mine to address
 				appPages.ShowPage("mineBlocksForm")
+
+				mineBlocksForm.SetFocus(1)
 
 				mineBlocksForm.GetFormItem(0).(*tview.TextView).SetText(
 					fmt.Sprintf("Node %d", currentNodeIndex),
@@ -319,15 +325,20 @@ func newNodeActionsList(
 
 				actionsHandler.data.nodesDetails[currentNodeIndex].connected = true
 			case 5: // Replace by fee drain to address
+				if mempoolTxList.List.GetItemCount() == 0 {
+					outputView.AddError("no transactions in mempool")
+					return
+				}
+
 				appPages.ShowPage("replaceByFeeDrainToAddressForm")
 
-				rbfDrainToAdress.GetFormItem(0).(*tview.TextView).SetText(
+				rbfDrainToAddress.GetFormItem(0).(*tview.TextView).SetText(
 					fmt.Sprintf("Node %d", currentNodeIndex),
 				)
 
 				txID, _ := mempoolTxList.GetItemText(mempoolTxList.GetCurrentItem())
 
-				rbfDrainToAdress.GetFormItem(1).(*tview.TextView).SetText(txID)
+				rbfDrainToAddress.GetFormItem(1).(*tview.TextView).SetText(txID)
 
 				nodeRPCClient := actionsHandler.btcpn.Nodes()[currentNodeIndex].RPCClient()
 
@@ -353,10 +364,10 @@ func newNodeActionsList(
 					return
 				}
 
-				rbfDrainToAdress.GetFormItem(2).(*tview.TextView).
+				rbfDrainToAddress.GetFormItem(2).(*tview.TextView).
 					SetText(fmt.Sprintf("%.2f", totalInputs))
 
-				rbfDrainToAdress.GetFormItem(3).(*tview.DropDown).
+				rbfDrainToAddress.GetFormItem(3).(*tview.DropDown).
 					SetOptions(
 						data.toFormAddresses(),
 						func(option string, i int) {
@@ -369,7 +380,7 @@ func newNodeActionsList(
 								addr = a[1]
 							}
 
-							rbfDrainToAdress.
+							rbfDrainToAddress.
 								GetFormItem(4).(*tview.InputField).
 								SetText(addr)
 						}).
@@ -386,7 +397,7 @@ func newNodeActionsList(
 		List:              list,
 		sendBitcoinForm:   sendBitcoinForm,
 		mineBlocksForm:    mineBlocksForm,
-		rbfDrainToAddress: rbfDrainToAdress,
+		rbfDrainToAddress: rbfDrainToAddress,
 	}
 }
 
@@ -402,7 +413,7 @@ func newSendBitcoinForm(
 ) *sendBitcoinForm {
 	form := tview.NewForm()
 
-	hide := hideForm(appPages, "sendBitcoinForm", form)
+	hide := hideForm(appPages, form)
 
 	const (
 		labelSenderNode      = "Sender Node"
@@ -495,7 +506,7 @@ func newMineBlocksForm(
 ) *mineBlocksForm {
 	form := tview.NewForm()
 
-	hide := hideForm(appPages, "mineBlocksForm", form)
+	hide := hideForm(appPages, form)
 
 	const (
 		labelMinerNode = "Miner Node"
@@ -595,7 +606,7 @@ func newReplaceByFeeDrainToAddressForm(
 ) *replaceByFeeDrainToAddressForm {
 	form := tview.NewForm()
 
-	hide := hideForm(appPages, "replaceByFeeDrainToAddressForm", form)
+	hide := hideForm(appPages, form)
 
 	const (
 		labelNode               = "Node"
@@ -683,9 +694,9 @@ func newReplaceByFeeDrainToAddressForm(
 	}
 }
 
-func hideForm(appPages *tview.Pages, pageName string, form *tview.Form) func() {
+func hideForm(appPages *tview.Pages, form *tview.Form) func() {
 	return func() {
-		appPages.HidePage(pageName)
+		appPages.SwitchToPage("background")
 
 		for i := 0; i < form.GetFormItemCount(); i++ {
 			switch formItem := form.GetFormItem(i).(type) {
@@ -695,8 +706,6 @@ func hideForm(appPages *tview.Pages, pageName string, form *tview.Form) func() {
 				formItem.SetText("")
 			}
 		}
-
-		form.SetFocus(1)
 	}
 }
 
@@ -743,13 +752,13 @@ func newAppPages(
 
 	pages.
 		AddPage("background", appFlex, true, true).
-		AddPage("sendBitcoinForm", centeredForm(
-			nodeActionsList.sendBitcoinForm,
+		AddPage("mineBlocksForm", centeredForm(
+			nodeActionsList.mineBlocksForm,
 			width,
 			height,
 		), true, false).
-		AddPage("mineBlocksForm", centeredForm(
-			nodeActionsList.mineBlocksForm,
+		AddPage("sendBitcoinForm", centeredForm(
+			nodeActionsList.sendBitcoinForm,
 			width,
 			height,
 		), true, false).

@@ -44,7 +44,7 @@ type RPCClient interface {
 	// thus affected by options which limit spendability such as -spendzeroconfchange.
 	GetBalance(ctx context.Context) (Balance, error)
 
-	// GetTransaction returns the transaction with the given hash.
+	// GetTransaction returns the transaction with the given Hash.
 	GetTransaction(ctx context.Context, txHash string) (*Transaction, error)
 
 	ListAddresses(ctx context.Context) ([]string, error)
@@ -52,6 +52,8 @@ type RPCClient interface {
 	GetBestBlockHash(ctx context.Context) (string, error)
 
 	GetCoinbaseValue(ctx context.Context) (int64, error)
+
+	GetTransactionOutputs(ctx context.Context, txHash string) ([]MempoolTransactionOutput, error)
 }
 
 // RPCClientFactory is an interface for RPC client factories.

@@ -81,3 +81,15 @@ type TransactionVout struct {
 		Address string
 	}
 }
+
+// MempoolTransaction represents a BTC mempool transaction.
+type MempoolTransaction struct {
+	Hash    string
+	Outputs []MempoolTransactionOutput
+}
+
+// MempoolTransactionOutput represents a BTC mempool transaction output.
+type MempoolTransactionOutput struct {
+	Address string
+	Value   float64
+}

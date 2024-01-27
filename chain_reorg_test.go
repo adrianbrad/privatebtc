@@ -264,11 +264,11 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						c.GetRawMempoolFunc = func(ctx context.Context) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						disconnectedNodeRPCClient := newChainReorgSuccessRPCClient(peerCount)
@@ -295,7 +295,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr:         require.NoError,
-				expectedHash:      "hash",
+				expectedHash:      "Hash",
 			},
 			"MustDisconnectFirstError": {
 				chainReorgArgs: chainReorgArgs{
@@ -369,7 +369,7 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						c.GetRawMempoolFunc = func(ctx context.Context) ([]string, error) {
@@ -409,11 +409,11 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						c.GetRawMempoolFunc = func(ctx context.Context) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						disconnectedNodeRPCClient := newChainReorgSuccessRPCClient(peerCount)
@@ -464,11 +464,11 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						c.GetRawMempoolFunc = func(ctx context.Context) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						return newPrivateNetworkStartSuccessRPCClientFactory(
@@ -552,13 +552,13 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						disconenctedNodeRPCClient.GetRawMempoolFunc = func(
 							ctx context.Context,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						networkRPCClient := newChainReorgSuccessRPCClient(peerCount)
@@ -585,7 +585,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr:         require.NoError,
-				expectedHash:      "hash",
+				expectedHash:      "Hash",
 			},
 			"MustDisconnectFirstError": {
 				chainReorgArgs: chainReorgArgs{
@@ -659,7 +659,7 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						c.GetRawMempoolFunc = func(ctx context.Context) ([]string, error) {
@@ -698,13 +698,13 @@ func TestChainReorg(t *testing.T) {
 							string,
 							float64,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						disconnectedNodeRPCClient.GetRawMempoolFunc = func(
 							ctx context.Context,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						networkRPCClient := newChainReorgSuccessRPCClient(peerCount)
@@ -805,13 +805,13 @@ func TestChainReorg(t *testing.T) {
 							int64,
 							string,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						networkClient.GetBestBlockHashFunc = func(
 							ctx context.Context,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						return newRPCClientFactoryWithDetachedNode(
@@ -828,7 +828,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr:         require.NoError,
-				expectedHashes:    []string{"hash"},
+				expectedHashes:    []string{"Hash"},
 			},
 			"MustDisconnectFirstError": {
 				chainReorgArgs: chainReorgArgs{
@@ -898,7 +898,7 @@ func TestChainReorg(t *testing.T) {
 							int64,
 							string,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						c.GetBestBlockHashFunc = func(ctx context.Context) (string, error) {
@@ -945,13 +945,13 @@ func TestChainReorg(t *testing.T) {
 							int64,
 							string,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						networkClient.GetBestBlockHashFunc = func(
 							ctx context.Context,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						return newRPCClientFactoryWithDetachedNode(
@@ -968,7 +968,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr: func(t require.TestingT, err error, i ...any) {
-					require.ErrorContains(t, err, "get disconnected node best block hash")
+					require.ErrorContains(t, err, "get disconnected node best block Hash")
 					require.ErrorIs(t, err, assert.AnError)
 				},
 				expectedHashes: nil,
@@ -987,11 +987,11 @@ func TestChainReorg(t *testing.T) {
 							int64,
 							string,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						c.GetBestBlockHashFunc = func(ctx context.Context) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						return newPrivateNetworkStartSuccessRPCClientFactory(c)
@@ -1063,7 +1063,7 @@ func TestChainReorg(t *testing.T) {
 						networkNodeClient.GetBestBlockHashFunc = func(
 							ctx context.Context,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						disconnectedNodeClient := newChainReorgSuccessRPCClient(peerCount)
@@ -1073,13 +1073,13 @@ func TestChainReorg(t *testing.T) {
 							int64,
 							string,
 						) ([]string, error) {
-							return []string{"hash"}, nil
+							return []string{"Hash"}, nil
 						}
 
 						disconnectedNodeClient.GetBestBlockHashFunc = func(
 							ctx context.Context,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						return newRPCClientFactoryWithDetachedNode(
@@ -1096,7 +1096,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr:         require.NoError,
-				expectedHashes:    []string{"hash"},
+				expectedHashes:    []string{"Hash"},
 			},
 			"MustDisconnectFirstError": {
 				chainReorgArgs: chainReorgArgs{
@@ -1359,7 +1359,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr: func(t require.TestingT, err error, i ...any) {
-					require.ErrorContains(t, err, "get disconnected node best block hash")
+					require.ErrorContains(t, err, "get disconnected node best block Hash")
 					require.ErrorIs(t, err, assert.AnError)
 				},
 			},
@@ -1400,7 +1400,7 @@ func TestChainReorg(t *testing.T) {
 						disconnectedNodeClient.GetBestBlockHashFunc = func(
 							ctx context.Context,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						return newRPCClientFactoryWithDetachedNode(
@@ -1464,7 +1464,7 @@ func TestChainReorg(t *testing.T) {
 				},
 				newChainReorgFunc: newChainReorgWithDisconnect,
 				assertErr: func(t require.TestingT, err error, i ...any) {
-					require.ErrorContains(t, err, "get network best block hash")
+					require.ErrorContains(t, err, "get network best block Hash")
 					require.ErrorIs(t, err, assert.AnError)
 				},
 			},
@@ -1491,7 +1491,7 @@ func TestChainReorg(t *testing.T) {
 						networkNodeClient.GetBestBlockHashFunc = func(
 							ctx context.Context,
 						) (string, error) {
-							return "hash", nil
+							return "Hash", nil
 						}
 
 						disconnectedNodeClient := newChainReorgSuccessRPCClient(peerCount)

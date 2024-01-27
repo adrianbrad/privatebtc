@@ -52,6 +52,9 @@ var _ privatebtc.RPCClient = &RPCClient{}
 //			GetTransactionFunc: func(ctx context.Context, txHash string) (*privatebtc.Transaction, error) {
 //				panic("mock out the GetTransaction method")
 //			},
+//			GetTransactionOutputsFunc: func(ctx context.Context, txHash string) ([]privatebtc.MempoolTransactionOutput, error) {
+//				panic("mock out the GetTransactionOutputs method")
+//			},
 //			ListAddressesFunc: func(ctx context.Context) ([]string, error) {
 //				panic("mock out the ListAddresses method")
 //			},
@@ -103,6 +106,9 @@ type RPCClient struct {
 
 	// GetTransactionFunc mocks the GetTransaction method.
 	GetTransactionFunc func(ctx context.Context, txHash string) (*privatebtc.Transaction, error)
+
+	// GetTransactionOutputsFunc mocks the GetTransactionOutputs method.
+	GetTransactionOutputsFunc func(ctx context.Context, txHash string) ([]privatebtc.MempoolTransactionOutput, error)
 
 	// ListAddressesFunc mocks the ListAddresses method.
 	ListAddressesFunc func(ctx context.Context) ([]string, error)
@@ -185,6 +191,13 @@ type RPCClient struct {
 			// TxHash is the txHash argument value.
 			TxHash string
 		}
+		// GetTransactionOutputs holds details about calls to the GetTransactionOutputs method.
+		GetTransactionOutputs []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// TxHash is the txHash argument value.
+			TxHash string
+		}
 		// ListAddresses holds details about calls to the ListAddresses method.
 		ListAddresses []struct {
 			// Ctx is the ctx argument value.
@@ -227,6 +240,7 @@ type RPCClient struct {
 	lockGetNewAddress         sync.RWMutex
 	lockGetRawMempool         sync.RWMutex
 	lockGetTransaction        sync.RWMutex
+	lockGetTransactionOutputs sync.RWMutex
 	lockListAddresses         sync.RWMutex
 	lockRemovePeer            sync.RWMutex
 	lockSendCustomTransaction sync.RWMutex
@@ -606,6 +620,42 @@ func (mock *RPCClient) GetTransactionCalls() []struct {
 	mock.lockGetTransaction.RLock()
 	calls = mock.calls.GetTransaction
 	mock.lockGetTransaction.RUnlock()
+	return calls
+}
+
+// GetTransactionOutputs calls GetTransactionOutputsFunc.
+func (mock *RPCClient) GetTransactionOutputs(ctx context.Context, txHash string) ([]privatebtc.MempoolTransactionOutput, error) {
+	if mock.GetTransactionOutputsFunc == nil {
+		panic("RPCClient.GetTransactionOutputsFunc: method is nil but RPCClient.GetTransactionOutputs was just called")
+	}
+	callInfo := struct {
+		Ctx    context.Context
+		TxHash string
+	}{
+		Ctx:    ctx,
+		TxHash: txHash,
+	}
+	mock.lockGetTransactionOutputs.Lock()
+	mock.calls.GetTransactionOutputs = append(mock.calls.GetTransactionOutputs, callInfo)
+	mock.lockGetTransactionOutputs.Unlock()
+	return mock.GetTransactionOutputsFunc(ctx, txHash)
+}
+
+// GetTransactionOutputsCalls gets all the calls that were made to GetTransactionOutputs.
+// Check the length with:
+//
+//	len(mockedRPCClient.GetTransactionOutputsCalls())
+func (mock *RPCClient) GetTransactionOutputsCalls() []struct {
+	Ctx    context.Context
+	TxHash string
+} {
+	var calls []struct {
+		Ctx    context.Context
+		TxHash string
+	}
+	mock.lockGetTransactionOutputs.RLock()
+	calls = mock.calls.GetTransactionOutputs
+	mock.lockGetTransactionOutputs.RUnlock()
 	return calls
 }
 

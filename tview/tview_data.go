@@ -1,17 +1,17 @@
 package tview
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/adrianbrad/privatebtc"
-	"golang.org/x/exp/maps"
 	"golang.org/x/sync/errgroup"
 )
 
 type data struct {
-	btcpn        *privatebtc.PrivateNetwork
-	nodesDetails []*nodeDetails
-	mempool      map[string]*mempoolTxDetails
+	btcpn          *privatebtc.PrivateNetwork
+	nodesDetails   []*nodeDetails
+	networkMempool privatebtc.NetworkMempool
 }
 
 const burnAddress = "bcrt1qzlfc3dw3ecjncvkwmwpvs84ejqzp4fr4agghm8"
@@ -28,16 +28,14 @@ func (d *data) toFormAddresses() []string {
 	return addrs
 }
 
-func (d *data) update() error {
-	eg := new(errgroup.Group)
-
-	maps.Clear(d.mempool)
+func (d *data) update(ctx context.Context) error {
+	eg, egCtx := errgroup.WithContext(ctx)
 
 	for nodeID := range d.btcpn.Nodes() {
 		nodeID := nodeID
 
 		eg.Go(func() error {
-			if err := d.updateNodeData(nodeID); err != nil {
+			if err := d.updateNodeData(egCtx, nodeID); err != nil {
 				return fmt.Errorf("update node %d data: %w", nodeID, err)
 			}
 
@@ -45,41 +43,25 @@ func (d *data) update() error {
 		})
 	}
 
-	if err := eg.Wait(); err != nil {
-		return err
-	}
-
-	for _, details := range d.nodesDetails {
-		for _, txHash := range details.mempoolTxs {
-			tx, ok := d.mempool[txHash]
-			if !ok {
-				outputs, err := getTransactionOutputs(
-					d.btcpn.Nodes()[details.id].RPCClient(),
-					txHash,
-				)
-				if err != nil {
-					return fmt.Errorf("get transaction outputs: %w", err)
-				}
-
-				d.mempool[txHash] = &mempoolTxDetails{
-					hash: txHash,
-					nodes: map[int]struct{}{
-						details.id: {},
-					},
-					outputs: outputs,
-				}
-
-				continue
-			}
-
-			tx.nodes[details.id] = struct{}{}
+	eg.Go(func() error {
+		mp, err := d.btcpn.Nodes().NetworkMempool(ctx)
+		if err != nil {
+			return fmt.Errorf("network mempool: %w", err)
 		}
+
+		d.networkMempool = mp
+
+		return nil
+	})
+
+	if err := eg.Wait(); err != nil {
+		return fmt.Errorf("eg wait: %w", err)
 	}
 
 	return nil
 }
 
-func (d *data) updateNodeData(nodeID int) error {
+func (d *data) updateNodeData(ctx context.Context, nodeID int) error {
 	eg, egCtx := errgroup.WithContext(ctx)
 
 	node := d.btcpn.Nodes()[nodeID]
@@ -133,22 +115,4 @@ func (d *data) updateNodeData(nodeID int) error {
 	}
 
 	return nil
-}
-
-func getTransactionOutputs(
-	client privatebtc.RPCClient,
-	txHash string,
-) (mempoolTxDetailsOutputs, error) {
-	tx, err := client.GetTransaction(ctx, txHash)
-	if err != nil {
-		return nil, fmt.Errorf("get transaction: %w", err)
-	}
-
-	outputs := make(mempoolTxDetailsOutputs, len(tx.Vout))
-
-	for _, v := range tx.Vout {
-		outputs[v.ScriptPubKey.Address] = v.Value
-	}
-
-	return outputs, nil
 }

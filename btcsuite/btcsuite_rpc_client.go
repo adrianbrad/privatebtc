@@ -364,6 +364,28 @@ func (c RPCClient) GetCoinbaseValue(context.Context) (int64, error) {
 	return v, nil
 }
 
+// GetTransactionOutputs returns the outputs of a transaction.
+func (c RPCClient) GetTransactionOutputs(
+	ctx context.Context,
+	txHash string,
+) ([]privatebtc.MempoolTransactionOutput, error) {
+	tx, err := c.GetTransaction(ctx, txHash)
+	if err != nil {
+		return nil, fmt.Errorf("get transaction: %w", err)
+	}
+
+	outputs := make([]privatebtc.MempoolTransactionOutput, len(tx.Vout))
+
+	for i, v := range tx.Vout {
+		outputs[i] = privatebtc.MempoolTransactionOutput{
+			Address: v.ScriptPubKey.Address,
+			Value:   v.Value,
+		}
+	}
+
+	return outputs, nil
+}
+
 var _ privatebtc.RPCClientFactory = (*RPCClientFactory)(nil)
 
 // RPCClientFactory is a factory for RPC clients.

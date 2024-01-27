@@ -2,47 +2,33 @@ package tview
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 
 	"github.com/adrianbrad/privatebtc"
-	"golang.org/x/exp/maps"
 )
 
-type mempoolTxDetailsOutputs map[string]float64
+type mempoolTxDetailsOutputs []privatebtc.MempoolTransactionOutput
 
 func (s mempoolTxDetailsOutputs) String() string {
-	ks := maps.Keys(s)
-
-	sort.Strings(ks)
-
 	var b strings.Builder
 
 	b.WriteString("\n")
 
-	for _, k := range ks {
-		b.WriteString(fmt.Sprintf("%s: %f\n", k, s[k]))
+	for _, output := range s {
+		b.WriteString(fmt.Sprintf("%s: %f\n", output.Address, output.Value))
 	}
 
 	return b.String()
 }
 
-type mempoolTxDetails struct {
-	hash    string
-	nodes   map[int]struct{}
-	outputs mempoolTxDetailsOutputs
-}
+type mempoolTxDetails privatebtc.NetworkMempoolTransaction
 
 func (m mempoolTxDetails) String() string {
-	nodes := maps.Keys(m.nodes)
-
-	sort.Ints(nodes)
-
 	return fmt.Sprintf(
 		"Hash: %s\nNodes: %v\nOutputs: %v",
-		m.hash,
-		nodes,
-		m.outputs,
+		m.Hash,
+		m.Nodes,
+		mempoolTxDetailsOutputs(m.Outputs),
 	)
 }
 

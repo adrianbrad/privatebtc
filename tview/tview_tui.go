@@ -1,6 +1,7 @@
 package tview
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -20,8 +21,6 @@ const bitcoinMaxAddressLength = 44
 
 // NewTUI creates a new Terminal User Interface for the given bitcoin private network.
 func NewTUI(btcPrivateNetwork *privatebtc.PrivateNetwork, version string) *TUI {
-	mempoolTxs := map[string]*mempoolTxDetails{}
-
 	nodesDetails := make([]*nodeDetails, len(btcPrivateNetwork.Nodes()))
 
 	for i := range btcPrivateNetwork.Nodes() {
@@ -32,9 +31,9 @@ func NewTUI(btcPrivateNetwork *privatebtc.PrivateNetwork, version string) *TUI {
 	}
 
 	data := &data{
-		btcpn:        btcPrivateNetwork,
-		nodesDetails: nodesDetails,
-		mempool:      mempoolTxs,
+		btcpn:          btcPrivateNetwork,
+		nodesDetails:   nodesDetails,
+		networkMempool: privatebtc.NetworkMempool{},
 	}
 
 	// Mempool
@@ -88,7 +87,7 @@ func NewTUI(btcPrivateNetwork *privatebtc.PrivateNetwork, version string) *TUI {
 			<-time.After(delay)
 
 			app.QueueUpdateDraw(func() {
-				if err := data.update(); err != nil {
+				if err := data.update(context.Background()); err != nil {
 					outputView.AddError(fmt.Sprintf("update error: %s", err))
 					return
 				}

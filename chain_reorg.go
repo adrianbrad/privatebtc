@@ -439,7 +439,7 @@ func (c *ChainReorgWithAssertion) MineBlocksOnNetwork(
 
 	discBestBlockHash, err := c.ChainReorg.disconnectedNode.RPCClient().GetBestBlockHash(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("get disconnected node best block hash: %w", err)
+		return nil, fmt.Errorf("get disconnected node best block Hash: %w", err)
 	}
 
 	if bestBlockHash == discBestBlockHash {
@@ -516,7 +516,7 @@ func (c *ChainReorgWithAssertion) ReconnectNode(ctx context.Context) error {
 	if syncNetwork := dcBc > nBc; syncNetwork {
 		blockHash, err := c.disconnectedNode.RPCClient().GetBestBlockHash(ctx)
 		if err != nil {
-			return fmt.Errorf("get disconnected node best block hash: %w", err)
+			return fmt.Errorf("get disconnected node best block Hash: %w", err)
 		}
 
 		const timeout = 5 * time.Second
@@ -532,7 +532,7 @@ func (c *ChainReorgWithAssertion) ReconnectNode(ctx context.Context) error {
 	if syncDisconnected := nBc > dcBc; syncDisconnected {
 		blockHash, err := c.networkNodes[0].RPCClient().GetBestBlockHash(ctx)
 		if err != nil {
-			return fmt.Errorf("get network best block hash: %w", err)
+			return fmt.Errorf("get network best block Hash: %w", err)
 		}
 
 		const timeout = 5 * time.Second

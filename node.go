@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/avast/retry-go"
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -46,7 +49,7 @@ func (n Node) RPCClient() RPCClient {
 
 // Fund is a helper function for funding a node.
 // It generates a new address to the block and mines 101 blocks to it,
-// returning the hash of the last block that was mined
+// returning the Hash of the last block that was mined
 // This method will fund the node wallet with 50 BTC.
 func (n Node) Fund(ctx context.Context) (string, error) {
 	addr, err := n.RPCClient().GetNewAddress(ctx, "fund")
@@ -68,18 +71,16 @@ func (n Node) Fund(ctx context.Context) (string, error) {
 func (n Node) DisconnectFromNetwork(ctx context.Context) error {
 	eg, egCtx := errgroup.WithContext(ctx)
 
-	for i, node := range n.pn.nodes {
-		if node == n {
+	for i := range n.pn.nodes {
+		node := n.pn.nodes[i]
+
+		if node.id == n.id {
 			continue
 		}
 
-		node := node
-		i := i
-
 		eg.Go(func() error {
-			err := node.RPCClient().RemovePeer(egCtx, n)
-			if err != nil {
-				return fmt.Errorf("add node %d: %w", i, err)
+			if err := node.RPCClient().RemovePeer(egCtx, n); err != nil {
+				return fmt.Errorf("remove peer %d from node %d: %w", n.id, node.id, err)
 			}
 
 			return nil
@@ -94,7 +95,7 @@ func (n Node) ConnectToNetwork(ctx context.Context) error {
 	eg, egCtx := errgroup.WithContext(ctx)
 
 	for i, node := range n.pn.nodes {
-		if node == n {
+		if node.id == n.id {
 			continue
 		}
 
@@ -165,7 +166,7 @@ func (nodes Nodes) Sync(ctx context.Context, toBlockHash string) error {
 				eg.Go(func() error {
 					blockHash, err := nodes[i].RPCClient().GetBestBlockHash(egCtx)
 					if err != nil {
-						return fmt.Errorf("get best block hash for node %d: %w", i, err)
+						return fmt.Errorf("get best block Hash for node %d: %w", i, err)
 					}
 
 					if blockHash != toBlockHash {
@@ -276,6 +277,85 @@ func (nodes Nodes) EnsureTransactionNotInAnyMempool(ctx context.Context, txHash 
 	return eg.Wait()
 }
 
+// NetworkMempoolTransaction represents a transaction in the network mempool.
+type NetworkMempoolTransaction struct {
+	MempoolTransaction
+	Nodes []int
+}
+
+// NetworkMempool represents the network mempool.
+type NetworkMempool map[string]*NetworkMempoolTransaction
+
+// Hashes returns the hashes of the network mempool transactions.
+func (m NetworkMempool) Hashes() []string {
+	hashes := maps.Keys(m)
+
+	slices.Sort(hashes)
+
+	return hashes
+}
+
+// NetworkMempool returns all the transactions aggregated from the nodes mempools.
+func (nodes Nodes) NetworkMempool(ctx context.Context) (NetworkMempool, error) {
+	mempoolTransactions := NetworkMempool{}
+
+	var mutex sync.Mutex
+
+	eg, egCtx := errgroup.WithContext(ctx)
+
+	for i := range nodes {
+		i := i
+
+		eg.Go(func() error {
+			nodeMempoolTxs, err := nodes[i].RPCClient().GetRawMempool(egCtx)
+			if err != nil {
+				return fmt.Errorf("get mempool for node %d: %w", i, err)
+			}
+
+			for _, txHash := range nodeMempoolTxs {
+				mutex.Lock()
+
+				if mpTx, exists := mempoolTransactions[txHash]; exists {
+					mpTx.Nodes = append(mpTx.Nodes, i)
+
+					mutex.Unlock()
+
+					continue
+				}
+
+				txOutputs, err := nodes[i].RPCClient().GetTransactionOutputs(egCtx, txHash)
+				if err != nil {
+					mutex.Unlock()
+
+					return fmt.Errorf("get transaction outputs: %w", err)
+				}
+
+				mempoolTransactions[txHash] = &NetworkMempoolTransaction{
+					MempoolTransaction: MempoolTransaction{
+						Hash:    txHash,
+						Outputs: txOutputs,
+					},
+					Nodes: []int{i},
+				}
+
+				mutex.Unlock()
+			}
+
+			return nil
+		})
+	}
+
+	if err := eg.Wait(); err != nil {
+		return NetworkMempool{}, fmt.Errorf("fetch nodes mempools: %w", err)
+	}
+
+	for i := range mempoolTransactions {
+		slices.Sort(mempoolTransactions[i].Nodes)
+	}
+
+	return mempoolTransactions, nil
+}
+
 // Balance is a balance of a node.
 type Balance struct {
 	Trusted  float64
@@ -295,14 +375,14 @@ func connectNodes(ctx context.Context, nodes []Node) error {
 
 	eg, egCtx := errgroup.WithContext(ctx)
 
-	for i, node := range nodes {
-		for j := i + 1; j < len(nodes); j++ {
-			j := j
-			node := node
+	for nodeIdx := range nodes {
+		for nextNodeIdx := nodeIdx + 1; nextNodeIdx < len(nodes); nextNodeIdx++ {
+			nextNode := nodes[nextNodeIdx]
+			node := nodes[nodeIdx]
 
 			eg.Go(func() error {
-				if err := node.RPCClient().AddPeer(egCtx, nodes[j]); err != nil {
-					return fmt.Errorf("add node %d: %w", j, err)
+				if err := node.RPCClient().AddPeer(egCtx, nextNode); err != nil {
+					return fmt.Errorf("add node %d: %w", nextNode.id, err)
 				}
 
 				return nil
