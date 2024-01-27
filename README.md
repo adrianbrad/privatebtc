@@ -1,7 +1,6 @@
 # PrivateBTC - Bitcoin Private Network Management and Testing Tool
 
 [![GitHub license](https://img.shields.io/github/license/adrianbrad/privatebtc)](https://github.com/adrianbrad/privatebtc/blob/main/LICENSE)
-[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
 
 
 ![GitHub release](https://img.shields.io/github/v/tag/adrianbrad/privatebtc)
@@ -12,7 +11,6 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/adrianbrad/privatebtc/badge)](https://api.securityscorecards.dev/projects/github.com/adrianbrad/privatebtc)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/8016/badge)](https://bestpractices.coreinfrastructure.org/projects/8016)
 [![Go Report Card](https://goreportcard.com/badge/github.com/adrianbrad/privatebtc)](https://goreportcard.com/report/github.com/adrianbrad/privatebtc)
-[![codecov](https://codecov.io/gh/adrianbrad/privatebtc/branch/main/graph/badge.svg)](https://codecov.io/gh/adrianbrad/privatebtc)
 
 [![lint-test](https://github.com/adrianbrad/privatebtc/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/adrianbrad/privatebtc/actions?query=workflow%3Alint-test)
 [![release](https://github.com/adrianbrad/privatebtc/actions/workflows/release.yaml/badge.svg)](https://github.com/adrianbrad/privatebtc/actions?query=workflow%3Arelease)
